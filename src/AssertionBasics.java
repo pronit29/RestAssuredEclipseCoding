@@ -3,7 +3,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
 //Validate if Add Place API is working fine as expected
-public class AddPlace {
+public class AssertionBasics {
     public static void main(String args[]) {
         final String jsonBody = "{\r\n"
                 + "  \"location\": {\r\n"
@@ -34,7 +34,9 @@ public class AddPlace {
                 .when().post(resourceURI)
 
                 //Then
-                .then().log().all().assertThat().statusCode(200);
+                .then().log().all().assertThat().statusCode(200)
+                .body("scope", equalTo("APP"))// This line is validating an element from the response body
+                .header("Server", equalTo("Apache/2.4.41 (Ubuntu)"));// This line is validating an element from the header
 
     }
 }

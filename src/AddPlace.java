@@ -1,5 +1,6 @@
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.*;
 
 //Validate if Add Place API is working fine as expected
 public class AddPlace {
@@ -33,7 +34,9 @@ public class AddPlace {
                 .when().post(resourceURI)
 
                 //Then
-                .then().log().all().assertThat().statusCode(200);
+                .then().log().all().assertThat().statusCode(200)
+                .body("scope", equalTo("APP"))
+                .header("Server", equalTo("Apache/2.4.41 (Ubuntu)"));
 
     }
 }

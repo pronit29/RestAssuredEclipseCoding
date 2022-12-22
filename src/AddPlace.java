@@ -1,6 +1,5 @@
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
 
 //Validate if Add Place API is working fine as expected
 public class AddPlace {

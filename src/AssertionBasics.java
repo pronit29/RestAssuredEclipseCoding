@@ -2,7 +2,7 @@ import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
-//Validate if Add Place API is working fine as expected
+//Validate if Add Place API is working fine as expected with Basic Assertions
 public class AssertionBasics {
     public static void main(String args[]) {
         final String jsonBody = "{\r\n"

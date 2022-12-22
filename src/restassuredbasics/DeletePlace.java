@@ -1,3 +1,4 @@
+package restassuredbasics;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import static org.hamcrest.Matchers.*;
@@ -5,7 +6,7 @@ import static org.hamcrest.Matchers.*;
 import static io.restassured.RestAssured.given;
 
 //Validate if Get Place API is working fine as expected
-public class UpdatePlace {
+public class DeletePlace {
     public static void main(String args[]) {
         final String jsonBodyAdd = "{\r\n"
                 + "  \"location\": {\r\n"
@@ -24,9 +25,10 @@ public class UpdatePlace {
                 + "  \"language\": \"French-IN\"\r\n"
                 + "}";
        
-        String resourceAddURI = "/maps/api/place/add/json";
-        String resourceGetURI = "/maps/api/place/get/json";
-        String resourceUpdateURI = "/maps/api/place/update/json";
+        String newAddress = "70 Summer walk, USA";
+        final String resourceAddURI = "/maps/api/place/add/json";
+        final String resourceGetURI = "/maps/api/place/get/json";
+        final String resourceUpdateURI = "/maps/api/place/update/json";
 
         //Pre-requisite - Set up the baseURI
         RestAssured.baseURI = "https://rahulshettyacademy.com";
@@ -68,7 +70,7 @@ public class UpdatePlace {
         String responseUpdate = given().log().all().queryParam("key", "qaclick123").header("Content-Type", "application/json")
         		.body("{\r\n"
                 		+ "\"place_id\":\""+placeId+"\",\r\n"
-                		+ "\"address\":\"70 Summer walk, USA\",\r\n"
+                		+ "\"address\":\""+newAddress+"\",\r\n"
                 		+ "\"key\":\"qaclick123\"\r\n"
                 		+ "}\r\n"
                 		+ "")
@@ -96,7 +98,7 @@ public class UpdatePlace {
         
         //Then
         .then().log().all().assertThat().statusCode(200)
-        .body("address", equalTo("70 Summer walk, USA"));
+        .body("address", equalTo(newAddress));
         
 
     }

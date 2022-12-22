@@ -1,3 +1,4 @@
+package restassuredbasics;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
 
@@ -20,7 +21,7 @@ public class AddPlace {
                 + "  \"website\": \"http://google.com\",\r\n"
                 + "  \"language\": \"French-IN\"\r\n"
                 + "}";
-        String resourceURI = "/maps/api/place/add/json";
+        final String resourceURI = "/maps/api/place/add/json";
 
         //Pre-requisite - Set up the baseURI
         RestAssured.baseURI = "https://rahulshettyacademy.com";

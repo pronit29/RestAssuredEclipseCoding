@@ -30,5 +30,17 @@ public class Payloads
 				+ "}";
 		return courseBody;
 	}
+	
+	public static String addBookPayload(String isbn, int aisle)
+    {
+        String addBookPay = "{\n" +
+                "\n" +
+                "\"name\":\"Learn Basics of Appium Automation\",\n" +
+                "\"isbn\":\""+isbn+"\",\n" +
+                "\"aisle\":\""+aisle+"\",\n" +
+                "\"author\":\"John Moxley\"\n" +
+                "}\n";
+        return addBookPay;
+    }
 
 }

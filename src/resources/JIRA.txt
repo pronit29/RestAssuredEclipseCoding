@@ -1,0 +1,1 @@
+This is a test JIRA file which we are using for adding attachment to a bug scenario using restassured.

@@ -1,19 +1,31 @@
 package OAuth2;
 
+import static io.restassured.RestAssured.given;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.testng.Assert;
+
+import POJOClasses.APIPojo;
+import POJOClasses.GetCourse;
+import POJOClasses.WebAutomationPojo;
 import io.restassured.RestAssured;
+import io.restassured.parsing.Parser;
 import io.restassured.path.json.JsonPath;
 import reusablemethods.ReusableMethods;
-
-import static io.restassured.RestAssured.given;
 
 public class OAuthTest {
 
     public static void main(String args[]) throws InterruptedException {
 
+        GetCourse obj = new GetCourse();
+
         RestAssured.baseURI = "https://rahulshettyacademy.com";
         final String browserURL = "https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.email&auth_url=https://accounts.google.com/o/oauth2/v2/auth&client_id=692183103107-p0m7ent2hk7suguv4vq22hjcfhcr43pj.apps.googleusercontent.com&response_type=code&redirect_uri=https://rahulshettyacademy.com/getCourse.php";
         final String oauthResource = "oauth2/v4/token";
-        String oauthCode = "4%2F0AWgavdceLApfqR2yu3V9DBZO4h0TtXYdDVsV7qdvqRXUzT8IOshXUgQZH0AJXueuoSpkKA";
+        String oauthCode = "4%2F0AWgavdfZ0mEI8pij9an-IlktxDdWkAbUONVKU6seUzdpBM0cOGMa5Su2L581aibponHyCQ";
         final String oauthClientId = "692183103107-p0m7ent2hk7suguv4vq22hjcfhcr43pj.apps.googleusercontent.com";
         final String oauthClientSecret = "erZOWM9g3UtwNRj340YYaK_W";
         final String oauthRedirectURI = "https://rahulshettyacademy.com/getCourse.php";
@@ -24,9 +36,11 @@ public class OAuthTest {
         final String resource = "/getCourse.php";
         final String emailXpath = "//input[@id='identifierId']";
         final String passwordXpath = "//input[@type='password']";
+        String[] courseTitle = {"Selenium Webdriver Java", "Cypress", "Protractor"};
 
 
         // This UI web automation cannot be done due to new restrictions made by google
+
 //        System.setProperty("webdriver.chrome.driver", "src/main/resources/Drivers/chromedriver.exe");
 //        WebDriver driver = new ChromeDriver();
 //        driver.get(browserURL);
@@ -70,12 +84,38 @@ public class OAuthTest {
         System.out.println(accessToken);
 
 
-        //Building the Test
-        String response = given().queryParam("access_token", accessToken)
-                .when().get(resource)
-                .asString();
+        //Building the Test using POJO Class
+        GetCourse gc = given().queryParam("access_token", accessToken)
+                .expect().defaultParser(Parser.JSON)
+                .when().get(oauthRedirectURI)
+                        .as(GetCourse.class);
+        System.out.println(gc.getLinkedIn());
+        //System.out.println(gc.getCourses().getApi().get(1).getCourseTitle());
 
-        System.out.println(response);
+        //Extracting the price of the SoapUI Webservices testing course
+        List<APIPojo> apiCourses = gc.getCourses().getApi();
+        for(int i=0; i<apiCourses.size(); i++)
+        {
+            String apicourseTitles = apiCourses.get(i).getCourseTitle();
+            if(apicourseTitles.equalsIgnoreCase("SoapUI Webservices testing"))
+            {
+                String priceCourse = apiCourses.get(i).getPrice();
+                System.out.println("<-- PRICE OF THE COURSE --> "+priceCourse);
+            }
+        }
+
+        //Print all the Course Titles of WebAutomation
+        ArrayList<String> arr = new ArrayList<String>();
+        List<WebAutomationPojo> webAutomationCourses = gc.getCourses().getWebAutomation();
+        for(int j=0; j<webAutomationCourses.size(); j++)
+        {
+            String courseTitles = webAutomationCourses.get(j).getCourseTitle();
+            arr.add(courseTitles);
+        }
+
+        List<String> expectedList = Arrays.asList(courseTitle);
+        Assert.assertTrue(arr.equals(expectedList));
+
 
     }
 }
